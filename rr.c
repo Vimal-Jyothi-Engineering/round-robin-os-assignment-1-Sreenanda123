@@ -8,22 +8,25 @@ struct process {
 };
 
 int main() {
-    int n, tq;
-    scanf("%d", &n);
 
-    struct process p[20];
+    int n = 4;
+    int tq = 2;
 
-    for(int i = 0; i < n; i++) {
-        scanf("%s %d %d", p[i].pid, &p[i].at, &p[i].bt);
-        p[i].rt = p[i].bt;
-    }
+    struct process p[20] = {
+        {"P1", 0, 5},
+        {"P2", 1, 3},
+        {"P3", 2, 6},
+        {"P4", 3, 4}
+    };
 
-    scanf("%d", &tq);   // time quantum
-
-    int time = 0, done = 0;
     float avg_wt = 0, avg_tat = 0;
+    int time = 0, done = 0;
+
+    for(int i = 0; i < n; i++)
+        p[i].rt = p[i].bt;
 
     while(done < n) {
+
         for(int i = 0; i < n; i++) {
 
             if(p[i].rt > 0 && p[i].at <= time) {
@@ -43,6 +46,7 @@ int main() {
     }
 
     for(int i = 0; i < n; i++) {
+
         p[i].tat = p[i].ct - p[i].at;
         p[i].wt = p[i].tat - p[i].bt;
 
