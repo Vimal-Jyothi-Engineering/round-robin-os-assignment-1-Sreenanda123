@@ -1,33 +1,29 @@
 #include <stdio.h>
 
 int main() {
-    int n, i, time = 0, remain, tq;
-    int bt[20], rt[20], wt[20], tat[20];
-
-    printf("Enter number of processes: ");
-    scanf("%d", &n);
+    int n = 4;                     // number of processes
+    int bt[] = {10, 5, 8, 6};      // burst times
+    int rt[4];                     // remaining times
+    int wt[4], tat[4];
+    int tq = 2;                    // time quantum
+    int time = 0, remain;
+    int i;
 
     remain = n;
 
     for(i = 0; i < n; i++) {
-        printf("Enter burst time for P%d: ", i+1);
-        scanf("%d", &bt[i]);
-        rt[i] = bt[i];   // remaining time
+        rt[i] = bt[i];
     }
-
-    printf("Enter time quantum: ");
-    scanf("%d", &tq);
 
     while(remain != 0) {
         for(i = 0; i < n; i++) {
             if(rt[i] > 0) {
                 if(rt[i] <= tq) {
                     time += rt[i];
-                    rt[i] = 0;
                     wt[i] = time - bt[i];
+                    rt[i] = 0;
                     remain--;
-                } 
-                else {
+                } else {
                     rt[i] -= tq;
                     time += tq;
                 }
@@ -35,7 +31,7 @@ int main() {
         }
     }
 
-    printf("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    printf("Process\tBurst Time\tWaiting Time\tTurnaround Time\n");
 
     for(i = 0; i < n; i++) {
         tat[i] = bt[i] + wt[i];
