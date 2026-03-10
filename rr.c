@@ -1,40 +1,46 @@
 #include <stdio.h>
-#include <string.h>
-
-struct process {
-    char pid[10];
-    int at, bt, rt;
-    int ct, wt, tat;
-};
 
 int main() {
-    int n;
+    int n, i, time = 0, remain, tq;
+    int bt[20], rt[20], wt[20], tat[20];
+
+    printf("Enter number of processes: ");
     scanf("%d", &n);
 
-    struct process p[20];
+    remain = n;
 
-    for(int i = 0; i < n; i++) {
-        scanf("%s %d %d", p[i].pid, &p[i].at, &p[i].bt);
-        p[i].rt = p[i].bt;
+    for(i = 0; i < n; i++) {
+        printf("Enter burst time for P%d: ", i+1);
+        scanf("%d", &bt[i]);
+        rt[i] = bt[i];   // remaining time
     }
 
-  ..
-    ..
-    ..
-    .
-    ..
-    
-   
-                 printf("Waiting Time:\n");
-    for(int i = 0; i < n; i++)
-        printf("%s %d\n", p[i].pid, p[i].wt);
+    printf("Enter time quantum: ");
+    scanf("%d", &tq);
 
-    printf("Turnaround Time:\n");
-    for(int i = 0; i < n; i++)
-        printf("%s %d\n", p[i].pid, p[i].tat);
+    while(remain != 0) {
+        for(i = 0; i < n; i++) {
+            if(rt[i] > 0) {
+                if(rt[i] <= tq) {
+                    time += rt[i];
+                    rt[i] = 0;
+                    wt[i] = time - bt[i];
+                    remain--;
+                } 
+                else {
+                    rt[i] -= tq;
+                    time += tq;
+                }
+            }
+        }
+    }
 
-    printf("Average Waiting Time: %.2f\n", avg_wt/n);
-    printf("Average Turnaround Time: %.2f\n", avg_tat/n);
+    printf("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n");
+
+    for(i = 0; i < n; i++) {
+        tat[i] = bt[i] + wt[i];
+        printf("P%d\t%d\t\t%d\t\t%d\n", i+1, bt[i], wt[i], tat[i]);
+    }
 
     return 0;
 }
